@@ -1,5 +1,4 @@
 import React, {ChangeEvent, useState} from "react";
-import set = Reflect.set;
 
 type EditableSpanPropsType = {
     title: string

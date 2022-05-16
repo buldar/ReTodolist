@@ -26,7 +26,9 @@ function App() {
 
     let [tasks, setTasks] = useState<TasksStateType>({
         [todolistId1]: [
-            {id: v1(), title: "HTML&CSS", isDone: true},
+            {id: v1(), title: "HTML", isDone: true},
+            {id: v1(), title: "CSS", isDone: false},
+            {id: v1(), title: "React", isDone: false},
             {id: v1(), title: "JS", isDone: true}
         ],
         [todolistId2]: [
@@ -38,7 +40,7 @@ function App() {
 
     function removeTask(id: string, todolistId: string) {
         let todolistTasks = tasks[todolistId];
-        tasks[todolistId] = todolistTasks.filter(t => t.id != id);
+        tasks[todolistId] = todolistTasks.filter(t => t.id !== id);
         setTasks({...tasks});
     }
 
@@ -67,7 +69,7 @@ function App() {
     }
 
     function removeTodolist(id: string) {
-        setTodolists(todolists.filter(tl => tl.id != id));
+        setTodolists(todolists.filter(tl => tl.id !== id));
         delete tasks[id];
         setTasks({...tasks});
     }
