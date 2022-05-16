@@ -1,6 +1,7 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from "react";
-import {Button} from "@material-ui/core";
+import {Button, IconButton} from "@material-ui/core";
 import TextField from "@material-ui/core/TextField";
+import {AddBox} from "@material-ui/icons";
 
 type AddItemFormType = {
     addItem: (title: string) => void,
@@ -34,20 +35,17 @@ export function AddItemForm(props: AddItemFormType) {
 
     return (
         <div>
-            {/*<input value={title}*/}
-            {/*       onChange={onChangeHandler}*/}
-            {/*       onKeyPress={onKeyPressHandler}*/}
-            {/*       className={error ? "error" : ""}*/}
-            {/*/>*/}
-            <TextField id="outlined-search" label="Search field" type="search"
+            <TextField id="outlined-search" label="New title" type="search"
                        value={title}
+                       error={!!error}
                        onChange={onChangeHandler}
                        onKeyPress={onKeyPressHandler}
+                       helperText={error}
             />
-            <Button onClick={addItem}
-                    variant={"contained"}
-                    color={"primary"}>+</Button>
-            {error && <div className="error-message">{error}</div>}
+            <IconButton color={"inherit"}
+                        onClick={addItem}>
+                <AddBox fontSize={"large"}/>
+            </IconButton>
         </div>
     )
 }
