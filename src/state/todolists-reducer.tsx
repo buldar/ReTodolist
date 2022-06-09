@@ -1,0 +1,78 @@
+import {FilterValuesType} from "../App";
+import {v1} from "uuid";
+
+type TodolistType = {
+    id: string,
+    title: string,
+    filter: FilterValuesType
+}
+
+export type RemoveTodolistActionType = {
+    type:'REMOVE-TODOLIST',
+    id:string
+}
+
+export type AddTodolistActionType = {
+    type:'ADD-TODOLIST',
+    title:string
+}
+
+export type ChangeTodolistTitleActionType = {
+    type:'CHANGE-TODOLIST-TITLE',
+    title:string
+    id:string
+}
+export type ChangeTodolistFilterActionType = {
+    type:'CHANGE-TODOLIST-FILTER',
+    filter:FilterValuesType
+    id:string
+}
+
+type ActionType = RemoveTodolistActionType
+| AddTodolistActionType
+| ChangeTodolistTitleActionType
+| ChangeTodolistFilterActionType
+
+export const RemoveTodolistAC = (todolistId:string):RemoveTodolistActionType => {
+    return {type:'REMOVE-TODOLIST',id:todolistId}
+}
+export  const AddTodolistAC = (title:string):AddTodolistActionType => {
+    return {title:title,type:"ADD-TODOLIST"}
+}
+export const ChangeTodolistTitleAC = (title:string,id:string):ChangeTodolistTitleActionType => {
+    return  {id:id,title:title,type:"CHANGE-TODOLIST-TITLE"}
+}
+export const ChangeTodolistFilterAC = (filter:FilterValuesType,id:string):ChangeTodolistFilterActionType => {
+    return {type:"CHANGE-TODOLIST-FILTER",filter:filter,id:id}
+}
+
+
+
+
+
+export const todolistsReducer = (state: Array<TodolistType>, action: ActionType) => {
+    switch (action.type) {
+        case 'REMOVE-TODOLIST':
+            return [...state].filter(tl => tl.id !== action.id);
+        case 'ADD-TODOLIST':
+            return [...state, {id: v1(), title: action.title, filter: "all"}];
+        case 'CHANGE-TODOLIST-TITLE':
+            let changeTodolistTitleState = [...state]
+            let renamedTotolist = changeTodolistTitleState.find(tl => tl.id === action.id)
+            if (renamedTotolist) {
+                renamedTotolist.title = action.title
+            }
+            return changeTodolistTitleState;
+        case 'CHANGE-TODOLIST-FILTER':
+            let changeFilterState = [...state]
+            let todolistWithChangedFilter = changeFilterState.find(tl => tl.id === action.id)
+            if (todolistWithChangedFilter) {
+                todolistWithChangedFilter.filter = action.filter
+                return changeFilterState
+            }
+        default:
+            return state
+
+    }
+
+}

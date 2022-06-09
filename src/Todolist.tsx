@@ -4,7 +4,6 @@ import {AddItemForm} from "./AddItemForm";
 import {EditableSpan} from "./EditableSpan";
 import {IconButton, Button, Checkbox} from "@material-ui/core";
 import {Delete} from "@material-ui/icons";
-// import Button from "@material-ui/core/Button";
 
 
 export type TaskType = {
@@ -82,7 +81,7 @@ export function Todolist(props: PropsType) {
                     color={"primary"}>Active</Button>
             <Button onClick={onCompletedClickHandler}
                     variant={props.filter === 'completed'?'outlined':'text'}
-                    color={"secondary"}>Complited</Button>
+                    color={"secondary"}>Completed</Button>
         </div>
     </div>;
 }

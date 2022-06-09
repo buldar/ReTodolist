@@ -7,9 +7,9 @@ import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography}
 import {Menu} from "@material-ui/icons";
 
 export type FilterValuesType = "all" | "active" | "completed";
-type TodolistType = {
-    id: string
-    title: string
+export type TodolistType = {
+    id: string,
+    title: string,
     filter: FilterValuesType
 }
 
@@ -103,8 +103,6 @@ function App() {
 
     return (
         <div className="App">
-
-
             <AppBar position="static">
                 <Toolbar>
                     <IconButton
