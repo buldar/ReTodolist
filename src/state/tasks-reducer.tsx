@@ -24,10 +24,20 @@ export type ChangeTaskTitleActionType = {
     todolistId: string,
     id: string
 }
+type AddTodolistType = {
+    type: 'ADD-TODOLIST',
+    id: string
+}
+type RemoveTodolistType = {
+    type: 'REMOVE-TODOLIST',
+    id: string
+}
 type ActionType = RemoveTaskActionType
     | AddTaskActionType
     | ChangeTaskStatusActionType
     | ChangeTaskTitleActionType
+    | AddTodolistType
+    | RemoveTodolistType
 
 export const removeTaskAC = (id: string, todolistId: string): RemoveTaskActionType => {
     return {type: 'REMOVE-TASK', id, todolistId}
@@ -37,6 +47,9 @@ export const addTaskAC = (title: string, todolistId: string): AddTaskActionType 
 }
 export const changeTaskStatusAC = (id: string, isDone: boolean, todolistId: string): ChangeTaskStatusActionType => {
     return {type: 'CHANGE-TASK-STATUS', id, isDone, todolistId}
+}
+export const changeTaskTitleAC = (title: string, id: string, todolistId: string): ChangeTaskTitleActionType => {
+    return {type: "CHANGE-TASK-TITLE", id, title, todolistId}
 }
 
 
@@ -54,12 +67,28 @@ export const tasksReducer = (state: TasksStateType, action: ActionType): TasksSt
                 [action.todolistId]: [{id: v1(), title: action.title, isDone: false}, ...state[action.todolistId]]
             }
         case "CHANGE-TASK-STATUS":
-            let newState = {...state}
-            let newTask = state[action.todolistId].find(t=>t.id===action.id)
-            if(newTask) {
-                newTask.isDone=action.isDone
+            let changeTaskStatusState = {...state}
+            let taskWithNewStatus = state[action.todolistId].find(t => t.id === action.id)
+            if (taskWithNewStatus) {
+                taskWithNewStatus.isDone = action.isDone
             }
-            return newState
+            return changeTaskStatusState
+        case "CHANGE-TASK-TITLE":
+            let newState = {...state}
+            let taskWithNewTitle = newState[action.todolistId].find(t => t.id === action.id)
+            if (taskWithNewTitle) {
+                taskWithNewTitle.title = action.title
+            }
+            return state
+        case "ADD-TODOLIST":
+            return {
+                ...state,
+                [action.id]: []
+            }
+        case "REMOVE-TODOLIST":
+            let deletedTlState = {...state}
+            delete deletedTlState[action.id]
+            return deletedTlState
         default:
             throw new Error('Wrong action!')
     }

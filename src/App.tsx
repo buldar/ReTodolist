@@ -85,8 +85,10 @@ function App() {
 
     function addTodolist(title: string) {
         let newTodolist: TodolistType = {id: v1(), title: title, filter: "all"}
-        tasks[newTodolist.id] = []
-        setTasks({...tasks})
+        setTasks({
+            ...tasks,
+            [newTodolist.id]: []
+        })
         setTodolists([newTodolist, ...todolists])
     }
 
@@ -117,7 +119,7 @@ function App() {
                 </Toolbar>
             </AppBar>
             <Container fixed>
-                <Grid container style={{padding:'20px'}}>
+                <Grid container style={{padding: '20px'}}>
                     <AddItemForm addItem={addTodolist}/>
                 </Grid>
                 <Grid container spacing={3}>
@@ -134,7 +136,7 @@ function App() {
                             }
 
                             return <Grid>
-                                <Paper style={{padding:'10px'}}>
+                                <Paper style={{padding: '10px'}}>
                                     <Todolist
                                         key={tl.id}
                                         id={tl.id}
