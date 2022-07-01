@@ -45,8 +45,9 @@ export const changeTaskTitleAC = (title: string, id: string, todolistId: string)
     return {type: "CHANGE-TASK-TITLE", id, title, todolistId}
 }
 
+const initialState:TasksStateType={}
 
-export const tasksReducer = (state: TasksStateType, action: ActionType): TasksStateType => {
+export const tasksReducer = (state: TasksStateType=initialState, action: ActionType): TasksStateType => {
     debugger
     switch (action.type) {
         case 'REMOVE-TASK':
@@ -84,7 +85,7 @@ export const tasksReducer = (state: TasksStateType, action: ActionType): TasksSt
             delete deletedTlState[action.id]
             return deletedTlState
         default:
-            throw new Error('Wrong action!')
+            return state
     }
 
 }
