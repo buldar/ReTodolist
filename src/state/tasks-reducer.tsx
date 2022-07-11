@@ -1,5 +1,5 @@
 import {v1} from "uuid";
-import {TasksStateType} from "../App";
+import {TasksStateType} from "../AppWithRedux";
 import {AddTodolistActionType, RemoveTodolistActionType} from "./todolists-reducer";
 
 
@@ -48,7 +48,6 @@ export const changeTaskTitleAC = (title: string, id: string, todolistId: string)
 const initialState:TasksStateType={}
 
 export const tasksReducer = (state: TasksStateType=initialState, action: ActionType): TasksStateType => {
-    debugger
     switch (action.type) {
         case 'REMOVE-TASK':
             return {
@@ -62,19 +61,22 @@ export const tasksReducer = (state: TasksStateType=initialState, action: ActionT
                 [action.todolistId]: [{id: v1(), title: action.title, isDone: false}, ...state[action.todolistId]]
             }
         case "CHANGE-TASK-STATUS":
-            let changeTaskStatusState = {...state}
-            let taskWithNewStatus = state[action.todolistId].find(t => t.id === action.id)
-            if (taskWithNewStatus) {
-                taskWithNewStatus.isDone = action.isDone
+            let todolistTasks = state[action.todolistId];
+            let task = todolistTasks.find(t => t.id === action.id);
+            if (task) {
+                task.isDone = action.isDone;
             }
-            return changeTaskStatusState
+            state[action.todolistId] = [...todolistTasks]
+            return {...state};
         case "CHANGE-TASK-TITLE":
-            let newState = {...state}
-            let taskWithNewTitle = newState[action.todolistId].find(t => t.id === action.id)
+            let newTasks = state[action.todolistId]
+            let taskWithNewTitle = newTasks.find(t => t.id === action.id)
             if (taskWithNewTitle) {
                 taskWithNewTitle.title = action.title
             }
-            return state
+            state[action.todolistId]=[...newTasks]
+
+            return {...state}
         case "ADD-TODOLIST":
             return {
                 ...state,
