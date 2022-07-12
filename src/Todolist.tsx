@@ -1,9 +1,10 @@
-import React, {ChangeEvent, useCallback} from 'react';
+import React, {useCallback} from 'react';
 import {FilterValuesType} from './AppWithRedux';
 import {AddItemForm} from "./AddItemForm";
 import {EditableSpan} from "./EditableSpan";
 import {IconButton, Button, Checkbox} from "@material-ui/core";
 import {Delete} from "@material-ui/icons";
+import {Task} from "./Task";
 
 
 export type TaskType = {
@@ -37,9 +38,9 @@ export const Todolist = React.memo(function (props: PropsType) {
             props.addTask(title, props.id)
         }, [props.id, props.addTask])
 
-        const changeTodolistTitle = (newTitle: string) => {
+        const changeTodolistTitle = useCallback((newTitle: string) => {
             props.changeTodolistTitle(props.id, newTitle)
-        }
+        }, [props.id, props.changeTodolistTitle])
 
         let tasksForTodolist = props.tasks
 
@@ -60,26 +61,14 @@ export const Todolist = React.memo(function (props: PropsType) {
             <AddItemForm addItem={addTask}/>
             <div>
                 {
-                    tasksForTodolist.map(t => {
-                        const onClickHandler = () => props.removeTask(t.id, props.id)
-                        const onChangeStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
-                            let newIsDoneValue = e.currentTarget.checked;
-                            props.changeTaskStatus(t.id, newIsDoneValue, props.id);
-                        }
-                        const onChangeTitleHandler = (newValue: string) => {
-                            props.changeTaskTitle(t.id, newValue, props.id)
-                        }
-
-                        return <div key={t.id} className={t.isDone ? "is-done" : ""}>
-                            <Checkbox onChange={onChangeStatusHandler} checked={t.isDone}/>
-                            <EditableSpan title={t.title}
-                                          onChange={onChangeTitleHandler}/>
-                            <IconButton size={"small"} onClick={onClickHandler}>
-                                <Delete fontSize={"inherit"}/>
-                            </IconButton>
-                        </div>
-                    })
-                }
+                    tasksForTodolist.map(t =>
+                        <Task removeTask={props.removeTask}
+                              changeTaskStatus={props.changeTaskStatus}
+                              changeTaskTitle={props.changeTaskTitle}
+                              task={t}
+                              todolistId={props.id}
+                              key={t.id}/>
+                    )}
             </div>
             <div>
                 <Button onClick={onAllClickHandler}

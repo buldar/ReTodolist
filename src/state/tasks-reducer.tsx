@@ -45,9 +45,9 @@ export const changeTaskTitleAC = (title: string, id: string, todolistId: string)
     return {type: "CHANGE-TASK-TITLE", id, title, todolistId}
 }
 
-const initialState:TasksStateType={}
+const initialState: TasksStateType = {}
 
-export const tasksReducer = (state: TasksStateType=initialState, action: ActionType): TasksStateType => {
+export const tasksReducer = (state: TasksStateType = initialState, action: ActionType): TasksStateType => {
     switch (action.type) {
         case 'REMOVE-TASK':
             return {
@@ -60,23 +60,28 @@ export const tasksReducer = (state: TasksStateType=initialState, action: ActionT
                 ...state,
                 [action.todolistId]: [{id: v1(), title: action.title, isDone: false}, ...state[action.todolistId]]
             }
-        case "CHANGE-TASK-STATUS":
+        case "CHANGE-TASK-STATUS": {
             let todolistTasks = state[action.todolistId];
-            let task = todolistTasks.find(t => t.id === action.id);
-            if (task) {
-                task.isDone = action.isDone;
-            }
-            state[action.todolistId] = [...todolistTasks]
+            state[action.todolistId] = todolistTasks.map(t => {
+                if (t.id === action.id) {
+                    t.isDone = action.isDone
+                    return {...t, isDone: action.isDone}
+                }
+                return t
+            })
             return {...state};
-        case "CHANGE-TASK-TITLE":
-            let newTasks = state[action.todolistId]
-            let taskWithNewTitle = newTasks.find(t => t.id === action.id)
-            if (taskWithNewTitle) {
-                taskWithNewTitle.title = action.title
-            }
-            state[action.todolistId]=[...newTasks]
-
-            return {...state}
+        }
+        case "CHANGE-TASK-TITLE": {
+            let todolistTasks = state[action.todolistId];
+            state[action.todolistId] = todolistTasks.map(t => {
+                if (t.id === action.id) {
+                    t.title = action.title
+                    return {...t, title: action.title}
+                }
+                return t
+            })
+            return {...state};
+        }
         case "ADD-TODOLIST":
             return {
                 ...state,
