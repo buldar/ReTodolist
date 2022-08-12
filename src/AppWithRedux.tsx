@@ -7,14 +7,16 @@ import {Menu} from "@material-ui/icons";
 import {
     addTodolistAC,
     changeTodolistFilterAC,
-    changeTodolistTitleAC, fetchTodolistsTC,
+    changeTodolistTitleAC,
+    fetchTodolistsTC,
     FilterValuesType,
-    removeTodolistAC, setTodolistsAC, TodolistsDomainType,
+    removeTodolistAC,
+    TodolistsDomainType,
 } from "./state/todolists-reducer";
 import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from "./state/tasks-reducer";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "./state/store";
-import {TaskStatuses, TaskType, todolistsAPI} from "./api/todolists-api";
+import {TaskStatuses, TaskType} from "./api/todolists-api";
 
 export type TasksStateType = {
     [key: string]: Array<TaskType>
@@ -88,10 +90,9 @@ function AppWithRedux() {
                 <Grid container spacing={3}>
                     {
                         todolists.map(tl => {
-                            let allTodolistTasks = tasks[tl.id];
-                            let tasksForTodolist = allTodolistTasks;
+                            let tasksForTodolist = tasks[tl.id];
 
-                            return <Grid>
+                            return <Grid style={{margin:'10px'}}>
                                 <Paper style={{padding: '10px'}}>
                                     <Todolist
                                         key={tl.id}
