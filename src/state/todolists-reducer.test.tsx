@@ -54,7 +54,7 @@ test('correct filter of todolist should be changed', () => {
 
 test ('todolists should be set', ()=>{
     const action = setTodolistsAC(startState)
-    const endState = todolistsReducer(startState, action)
+    const endState = todolistsReducer([], action)
 
     expect(endState.length).toBe(2)
     expect(endState[0]).toEqual({id: todolistId1, title: "What to learn", filter: "all", order:0, addedDate:''})
